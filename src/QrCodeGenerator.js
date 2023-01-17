@@ -4,13 +4,14 @@ import QRCode from "qrcode";
 
 const QrCodeGenerator = () => {
   const [imageUrl, setImageUrl] = useState();
+  const [domain, setDomain] = useState("retail");
   const [providerId, setProviderId] = useState();
   const [itemId, setItemId] = useState();
   const [fromLocation, setFromLocation] = useState();
   const [toLocation, setToLocation] = useState();
   const [url, setUrl] = useState();
   useEffect(() => {
-    let ondcUrl = 'https://www.ondc.org?'
+    let ondcUrl = `https://www.ondc.org/${domain}?`
     if (providerId && providerId.length > 0) {
       ondcUrl = `${ondcUrl}providerId=${providerId}&`
     }
@@ -28,7 +29,7 @@ const QrCodeGenerator = () => {
     QRCode.toDataURL(ondcUrl, function (err, dataUrl) {
       setImageUrl(dataUrl)
     })
-  }, [providerId, itemId, fromLocation, toLocation])
+  }, [domain, providerId, itemId, fromLocation, toLocation])
 
   return (
     <div className='qr-code-container'>
@@ -37,6 +38,18 @@ const QrCodeGenerator = () => {
       </h2>
       <div className='qr-code-area'>
         <div className='qr-code-form'>
+          <div className='qr-code-form-item'>
+            Domain
+            <select
+              className='qr-code-form-input'
+              name="domain" id="domain"
+              onChange={(e) => { setDomain(e.target.value) }}
+              value={domain}>
+              <option value="retail">Retail</option>
+              <option value="fashion">Fashion</option>
+              <option value="mobility">Mobility</option>
+            </select>
+          </div>
           <div className='qr-code-form-item'>
             Provider Id
             <input type="text" className='qr-code-form-input' onChange={(e) => setProviderId(e.target.value)} value={providerId} />
